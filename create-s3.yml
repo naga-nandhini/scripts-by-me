@@ -1,21 +1,31 @@
----
- - name:  provisioning S3 Bucket using Ansible playbook
-   hosts: localhost
-   connection: local
-   gather_facts: False
-   tags: provisioning
+- name: Provisioning S3 Bucket using Ansible playbook
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  tags: provisioning
 
-   tasks:
-     - name: create S3 bucket
-       s3_bucket:
-         name: naga-nandhini
-         state: present
-         region: us-east-1
-         versioning: yes
-         tags:
-           name: myansiblebucket
-           type: example
-       register: s3_url
+  vars_prompt:
+    - name: bucket_name
+      prompt: "Enter the S3 bucket name:"
+      private: no
 
-     - name: Display s3 url
-       debug: var=s3_url
+    - name: bucket_region
+      prompt: "Enter the region for the S3 bucket:"
+      private: no
+
+  tasks:
+    - name: Create S3 bucket
+      s3_bucket:
+        name: "{{bucket_name}}"
+        state: present
+        region: "{{bucket_region}}"
+        versioning: yes
+        tags:
+          name: myansiblebucket
+          type: example
+      register: s3_url
+
+    - name: Display S3 URL
+      debug:
+        var: s3_url
+
