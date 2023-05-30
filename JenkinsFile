@@ -1,0 +1,22 @@
+node {
+    stage('Checkout') {
+        // Use Git to clone your project repository
+        git 'https://github.com/naga-nandhini/scripts-by-me.git'
+    }
+
+    stage('Build') {
+        // Build your project, e.g., using Maven
+        bat 'mvn clean package'
+    }
+
+    stage('Deploy') {
+        // Copy the WAR file to the Tomcat webapps directory
+        bat 'vectra.war C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps'
+    }
+
+    stage('Restart Tomcat') {
+        // Restart Tomcat to apply the changes
+        bat 'C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin\\shutdown.bat'
+        bat 'C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\bin\\startup.bat'
+    }
+}
